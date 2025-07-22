@@ -1,0 +1,23 @@
+name: Show last two commit and there differance
+
+on: 
+  push:
+    branches:
+      - main
+
+jobs:
+  show-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Fetch the last two commits
+
+      - name: Show last two commits
+        run: |
+          git log -n 2 --pretty=format:"%h - %an, %ar : %s"
+
+      - name: Show diff between last two commits
+        run: |
+          git diff HEAD~1 HEAD
