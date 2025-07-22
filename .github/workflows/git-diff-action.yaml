@@ -1,6 +1,7 @@
 name: Show last two commit and there differance
 
 on: 
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -15,9 +16,12 @@ jobs:
           fetch-depth: 2  # Fetch the last two commits
 
       - name: Show last two commits
+        id: commits
         run: |
-          git log -n 2 --pretty=format:"%h - %an, %ar : %s"
+          echo "LAST_TWO=$(git log --pretty=format:"%H" -n 2 | paste -s -d ' ')" >> $GITHUB_OUTPUT
 
-      - name: Show diff between last two commits
+      - name: Show diff between last 2 commits
         run: |
-          git diff HEAD~1 HEAD
+          COMMITS=($(git log --pretty=format:"%H" -n 2))
+          echo "Comparing commits: ${COMMITS[1]} -> ${COMMITS[0]}"
+          git diff ${COMMITS[1]} ${COMMITS[0]}
