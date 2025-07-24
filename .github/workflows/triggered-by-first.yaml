@@ -2,7 +2,7 @@ name: Triggered by First Workflow
 
 on:
   workflow_run:
-    workflows: ["List Changed Files"]
+    workflows: ["Git Diff Action"]
     types:
       - completed
 
